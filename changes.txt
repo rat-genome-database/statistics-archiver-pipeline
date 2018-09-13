@@ -1,0 +1,22 @@
+Sep 13, 2018 - ver. 1.3.3
+  moved from subversion to github
+
+Jul 31, 2018 - ver. 1.3.2
+  annotation score board: fixed sql to properly compute stats for RDO_custom terms
+
+May 2, 2017 - ver. 1.3.1
+  converted from ANT to GRADLE; fixed stat names for annotations
+
+Mar 7, 2017 - ver. 1.3.0
+  added computation of protein interaction counts
+
+Jan 27, 2017 - ver. 1.2.9
+  extended computation to all available species (including newly added bonobo, dog and squirrel)
+
+Feb 19, 2016 - ver. 1.2.8
+  general score board: added computation of 'Genes with XDB', 'Qtls with XDB', 'Strains with XDB'
+  annotation score board: added computation of 'References with Annotations'
+
+Sep 25, 2015 - ver. 1.2.7
+  general score board - Gene Types
+    added computation of 'ncrna(microRNA)', 'microRNA target confirmed', 'microRNA target predicted'
