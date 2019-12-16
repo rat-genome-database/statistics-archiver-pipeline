@@ -1,11 +1,9 @@
 package edu.mcw.rgd.stats;
 
-import edu.mcw.rgd.dao.DataSourceFactory;
-import edu.mcw.rgd.dao.impl.SampleDAO;
 import edu.mcw.rgd.dao.impl.StatisticsDAO;
 import edu.mcw.rgd.datamodel.RgdId;
-import edu.mcw.rgd.datamodel.Sample;
 import edu.mcw.rgd.datamodel.SpeciesType;
+import edu.mcw.rgd.process.Utils;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.core.io.FileSystemResource;
@@ -14,11 +12,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * Created by IntelliJ IDEA. <br>
- * User: mtutaj <br>
- * Date: 6/23/11 <br>
- * Time: 3:20 PM <br>
- * <p>
+ * @author mtutaj
+ * @since 6/23/11
  * computes various stats about rgd objects and archives them in the special table in database
  */
 public class ScoreBoardArchiver {
@@ -36,19 +31,16 @@ public class ScoreBoardArchiver {
 
     public void archive() throws Exception{
 
+        long time0 = System.currentTimeMillis();
+
         System.out.println(getVersion());
-        System.out.println(dao.getConnectionInfo());
+        System.out.println("   "+dao.getConnectionInfo());
 
-        int speciesCount = SpeciesType.getSpeciesTypeKeys().size();
-        int[] specs = new int[speciesCount+1];
-        specs[0] = SpeciesType.ALL;
-        for( int i=1; i<specs.length; i++ ) {
-            specs[i] = i;
-        }
-
-        stampIt("START ");
+        Collection<Integer> specs = SpeciesType.getSpeciesTypeKeys();
 
         for (int speciesType : specs) {
+            System.out.println("stats for ["+ SpeciesType.getCommonName(speciesType)+"]");
+
             persistStats("RGD Object", speciesType, dao.getRGDObjectCount(speciesType));
             persistStats("Active Object", speciesType, dao.getActiveCount(speciesType));
             persistStats("Withdrawn Object", speciesType, dao.getWithdrawnCount(speciesType));
@@ -91,12 +83,12 @@ public class ScoreBoardArchiver {
             }
         }
 
-        stampIt("COMPLETE ");
+        System.out.print("COMPLETE   elapsed "+ Utils.formatElapsedTime(time0, System.currentTimeMillis()));
     }
 
     private void persistStats(String objectType, int speciesType, Map<String,String> map) throws Exception {
 
-        stampIt("saving stats for ["+ SpeciesType.getCommonName(speciesType)+"] ["+objectType+"] ");
+        System.out.println("   ["+objectType+"] "+map.size());
 
         dao.persistStatMap(objectType, speciesType, map);
     }
@@ -107,10 +99,5 @@ public class ScoreBoardArchiver {
 
     public String getVersion() {
         return version;
-    }
-
-    static SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd 'at' HH:mm:ss");
-    static void stampIt(String description) {
-        System.out.println(description + " " + sdf.format(new Date()));
     }
 }
