@@ -1,3 +1,6 @@
+Mar 13, 2020
+  updated oracle jdbc driver dependency
+
 Dec 16, 2019
   fix to not generate stats for non-existing species (species_type_key=13)
 
