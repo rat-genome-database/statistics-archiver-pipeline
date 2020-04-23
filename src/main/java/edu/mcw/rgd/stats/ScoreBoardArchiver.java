@@ -60,7 +60,13 @@ public class ScoreBoardArchiver {
             persistStats("Ontology Annotated Terms", speciesType, dao.getOntologyAnnotatedTermCount(speciesType));
 
             // added in MAY 2012 -- MT
-            int[] objectKeys = {0, RgdId.OBJECT_KEY_GENES, RgdId.OBJECT_KEY_QTLS, RgdId.OBJECT_KEY_STRAINS};
+            int[] objectKeys = {0,
+                    RgdId.OBJECT_KEY_GENES,
+                    RgdId.OBJECT_KEY_QTLS,
+                    RgdId.OBJECT_KEY_STRAINS,
+                    RgdId.OBJECT_KEY_VARIANTS,
+                    RgdId.OBJECT_KEY_CELL_LINES
+            };
             for( int objectKey: objectKeys ) {
                 String objectName = RgdId.getObjectTypeName(objectKey);
 
@@ -87,7 +93,10 @@ public class ScoreBoardArchiver {
 
     private void persistStats(String objectType, int speciesType, Map<String,String> map) throws Exception {
 
-        System.out.println("   ["+objectType+"] "+map.size());
+        // don't print if no results
+        if( map.size()!=0 ) {
+            System.out.println("   [" + objectType + "] " + map.size());
+        }
 
         dao.persistStatMap(objectType, speciesType, map);
     }
