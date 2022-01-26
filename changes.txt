@@ -1,5 +1,7 @@
 Jan 26, 2022
   updated log4j to avoid zero day exploit
+  summary email: do not show stats with 0 data
+  ontology annotation counts: added processing for VARIANTS and CELL_LINES
 
 Mar 13, 2020
   updated oracle jdbc driver dependency
