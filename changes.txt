@@ -1,3 +1,6 @@
+Jan 26, 2022
+  updated log4j to avoid zero day exploit
+
 Mar 13, 2020
   updated oracle jdbc driver dependency
 
