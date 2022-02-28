@@ -4,6 +4,8 @@ import edu.mcw.rgd.dao.impl.StatisticsDAO;
 import edu.mcw.rgd.datamodel.RgdId;
 import edu.mcw.rgd.datamodel.SpeciesType;
 import edu.mcw.rgd.process.Utils;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.core.io.FileSystemResource;
@@ -17,28 +19,34 @@ import java.util.*;
  */
 public class ScoreBoardArchiver {
     private String version;
+    StatisticsDAO dao = new StatisticsDAO();
+
+    Logger log = LogManager.getLogger("status");
 
     public static void main(String[] args) throws Exception {
 
         DefaultListableBeanFactory bf = new DefaultListableBeanFactory();
         new XmlBeanDefinitionReader(bf).loadBeanDefinitions(new FileSystemResource("properties/AppConfigure.xml"));
         ScoreBoardArchiver sb = (ScoreBoardArchiver) bf.getBean("archiver");
-        sb.archive();
-    }
 
-    StatisticsDAO dao = new StatisticsDAO();
+        try {
+            sb.archive();
+        } catch(Exception e) {
+            Utils.printStackTrace(e, sb.log);
+        }
+    }
 
     public void archive() throws Exception{
 
         long time0 = System.currentTimeMillis();
 
-        System.out.println(getVersion());
-        System.out.println("   "+dao.getConnectionInfo());
+        log.info(getVersion());
+        log.info("   "+dao.getConnectionInfo());
 
         Collection<Integer> specs = SpeciesType.getSpeciesTypeKeys();
 
         for (int speciesType : specs) {
-            System.out.println("stats for ["+ SpeciesType.getCommonName(speciesType)+"]");
+            log.info("stats for ["+ SpeciesType.getCommonName(speciesType)+"]");
 
             persistStats("RGD Object", speciesType, dao.getRGDObjectCount(speciesType));
             persistStats("Active Object", speciesType, dao.getActiveCount(speciesType));
@@ -88,14 +96,14 @@ public class ScoreBoardArchiver {
             }
         }
 
-        System.out.print("COMPLETE   elapsed "+ Utils.formatElapsedTime(time0, System.currentTimeMillis()));
+        log.info("COMPLETE   elapsed "+ Utils.formatElapsedTime(time0, System.currentTimeMillis()));
     }
 
     private void persistStats(String objectType, int speciesType, Map<String,String> map) throws Exception {
 
         // don't print if no results
         if( map.size()!=0 ) {
-            System.out.println("   [" + objectType + "] " + map.size());
+            log.debug("   [" + objectType + "] " + map.size());
         }
 
         dao.persistStatMap(objectType, speciesType, map);
