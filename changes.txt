@@ -1,3 +1,6 @@
+Feb 28, 2022
+  tuned up logging
+
 Jan 26, 2022
   updated log4j to avoid zero day exploit
   summary email: do not show stats with 0 data
