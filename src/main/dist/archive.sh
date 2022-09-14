@@ -1,6 +1,6 @@
 . /etc/profile
 
-APPDIR=/home/rgddata/pipelines/StatisticsArchiver
+APPDIR=/home/rgddata/pipelines/statistics-archiver-pipeline
 SERVER=`hostname -s | tr '[a-z]' '[A-Z]'`
 ELIST=mtutaj@mcw.edu
 if [ "$SERVER" == "REED" ]; then

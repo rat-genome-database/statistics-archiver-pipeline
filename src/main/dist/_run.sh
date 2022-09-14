@@ -2,7 +2,7 @@
 #
 #
 . /etc/profile
-APPNAME=StatisticsArchiver
+APPNAME=statistics-archiver-pipeline
 
 
 APPDIR=/home/rgddata/pipelines/$APPNAME

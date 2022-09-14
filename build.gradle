@@ -13,7 +13,7 @@ apply plugin: 'application'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 mainClassName = 'edu.mcw.rgd.stats.ScoreBoardArchiver'
-String myAppName = 'StatisticsArchiver'
+String myAppName = 'statistics-archiver-pipeline'
 
 project.archivesBaseName = myAppName
 
@@ -23,12 +23,12 @@ repositories {
 
 dependencies {
     compile 'org.apache.commons:commons-dbcp2:2.9.0'
-    compile 'commons-net:commons-net:3.7.2'
-    compile 'org.apache.logging.log4j:log4j-api:2.17.2'
-    compile 'org.apache.logging.log4j:log4j-core:2.17.2'
-    compile 'com.oracle.database.jdbc:ojdbc8:19.8.0.0'
-    compile 'org.springframework:spring-beans:5.2.0.RELEASE'
-    compile 'org.springframework:spring-jdbc:5.2.0.RELEASE'
+    compile 'commons-net:commons-net:3.8.0'
+    compile 'org.apache.logging.log4j:log4j-api:2.18.0'
+    compile 'org.apache.logging.log4j:log4j-core:2.18.0'
+    compile 'com.oracle.database.jdbc:ojdbc8:19.9.0.0'
+    compile 'org.springframework:spring-beans:5.2.1.RELEASE'
+    compile 'org.springframework:spring-jdbc:5.2.1.RELEASE'
 
     compile fileTree(dir: 'lib', include: '*.jar')
 }

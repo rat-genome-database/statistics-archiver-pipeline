@@ -1,6 +1,7 @@
-Apr 27, 2022
-  tuned up logging
+Sep 14, 2022
+  renamed distro to 'statistics-archiver-pipeline'
 
+Apr 27, 2022
 Feb 28, 2022
   tuned up logging
 
