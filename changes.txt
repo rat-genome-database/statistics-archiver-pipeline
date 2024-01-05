@@ -1,3 +1,6 @@
+Jan 05, 2024
+  updated to java 17
+
 Jul 11, 2023
   updated dependencies
 

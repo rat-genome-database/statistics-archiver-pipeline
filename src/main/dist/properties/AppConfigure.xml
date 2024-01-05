@@ -2,7 +2,7 @@
 
 <beans>
     <bean id="archiver" class="edu.mcw.rgd.stats.ScoreBoardArchiver">
-        <property name="version" value="Score Board Archiver  -- build Jul 11, 2023"/>
+        <property name="version" value="Score Board Archiver  -- build Jan 05, 2024"/>
     </bean>
 </beans>
 
