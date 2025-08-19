@@ -4,7 +4,7 @@ APPDIR=/home/rgddata/pipelines/statistics-archiver-pipeline
 SERVER=`hostname -s | tr '[a-z]' '[A-Z]'`
 ELIST=mtutaj@mcw.edu
 if [ "$SERVER" == "REED" ]; then
-    ELIST="jdepons@mcw.edu,mtutaj@mcw.edu"
+    ELIST="jdepons@mcw.edu mtutaj@mcw.edu"
 fi
 
 cd $APPDIR
