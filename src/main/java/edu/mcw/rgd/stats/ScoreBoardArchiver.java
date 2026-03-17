@@ -3,6 +3,7 @@ package edu.mcw.rgd.stats;
 import edu.mcw.rgd.dao.impl.StatisticsDAO;
 import edu.mcw.rgd.datamodel.RgdId;
 import edu.mcw.rgd.datamodel.SpeciesType;
+import edu.mcw.rgd.process.MemoryMonitor;
 import edu.mcw.rgd.process.Utils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,6 +26,11 @@ public class ScoreBoardArchiver {
 
     public static void main(String[] args) throws Exception {
 
+        long time0 = System.currentTimeMillis();
+
+        MemoryMonitor memoryMonitor = new MemoryMonitor();
+        memoryMonitor.start();
+
         DefaultListableBeanFactory bf = new DefaultListableBeanFactory();
         new XmlBeanDefinitionReader(bf).loadBeanDefinitions(new FileSystemResource("properties/AppConfigure.xml"));
         ScoreBoardArchiver sb = (ScoreBoardArchiver) bf.getBean("archiver");
@@ -33,7 +39,12 @@ public class ScoreBoardArchiver {
             sb.archive();
         } catch(Exception e) {
             Utils.printStackTrace(e, sb.log);
+            throw new RuntimeException(e);
         }
+
+        memoryMonitor.stop();
+        sb.log.info(memoryMonitor.getSummary());
+        sb.log.info("=== OK === elapsed "+ Utils.formatElapsedTime(time0, System.currentTimeMillis())+"\n");
     }
 
     public void archive() throws Exception{
