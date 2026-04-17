@@ -1,3 +1,6 @@
+Apr 17, 2026
+  updated README.md; updated dependencies
+
 Mar 17, 2026
   added MemoryMonitor to track heap usage during pipeline execution
   updated dependencies
