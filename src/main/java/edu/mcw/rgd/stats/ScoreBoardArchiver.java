@@ -35,16 +35,18 @@ public class ScoreBoardArchiver {
         new XmlBeanDefinitionReader(bf).loadBeanDefinitions(new FileSystemResource("properties/AppConfigure.xml"));
         ScoreBoardArchiver sb = (ScoreBoardArchiver) bf.getBean("archiver");
 
+        boolean ok = false;
         try {
             sb.archive();
+            ok = true;
         } catch(Exception e) {
             Utils.printStackTrace(e, sb.log);
-            throw new RuntimeException(e);
+            throw e;
+        } finally {
+            memoryMonitor.stop();
+            sb.log.info(memoryMonitor.getSummary());
+            sb.log.info((ok ? "=== OK === " : "=== FAILED === ") + "elapsed "+ Utils.formatElapsedTime(time0, System.currentTimeMillis())+"\n");
         }
-
-        memoryMonitor.stop();
-        sb.log.info(memoryMonitor.getSummary());
-        sb.log.info("=== OK === elapsed "+ Utils.formatElapsedTime(time0, System.currentTimeMillis())+"\n");
     }
 
     public void archive() throws Exception{
