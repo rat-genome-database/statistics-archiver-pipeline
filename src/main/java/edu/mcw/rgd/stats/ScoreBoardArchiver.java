@@ -11,7 +11,8 @@ import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.core.io.FileSystemResource;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * @author mtutaj
@@ -19,10 +20,14 @@ import java.util.*;
  * computes various stats about rgd objects and archives them in the special table in database
  */
 public class ScoreBoardArchiver {
+
+    /** sentinel meaning "across all object types" (not a real RGD object key) */
+    private static final int OBJECT_KEY_ALL = 0;
+
+    private static final Logger log = LogManager.getLogger("status");
+
     private String version;
     StatisticsDAO dao = new StatisticsDAO();
-
-    Logger log = LogManager.getLogger("status");
 
     public static void main(String[] args) throws Exception {
 
@@ -40,12 +45,12 @@ public class ScoreBoardArchiver {
             sb.archive();
             ok = true;
         } catch(Exception e) {
-            Utils.printStackTrace(e, sb.log);
+            Utils.printStackTrace(e, log);
             throw e;
         } finally {
             memoryMonitor.stop();
-            sb.log.info(memoryMonitor.getSummary());
-            sb.log.info((ok ? "=== OK === " : "=== FAILED === ") + "elapsed "+ Utils.formatElapsedTime(time0, System.currentTimeMillis())+"\n");
+            log.info(memoryMonitor.getSummary());
+            log.info((ok ? "=== OK === " : "=== FAILED === ") + "elapsed "+ Utils.formatElapsedTime(time0, System.currentTimeMillis())+"\n");
         }
     }
 
@@ -74,14 +79,13 @@ public class ScoreBoardArchiver {
             persistStats("XDB Count", speciesType, dao.getXDBsCount(speciesType));
             persistStats("References with Annotations", speciesType, dao.getAnnotatedReferencesCount(speciesType));
 
-            // added in JUNE 2011 -- MT
-            if( speciesType==0 ) {
+            if( speciesType == SpeciesType.ALL ) {
                 persistStats("Ontology Terms", speciesType, dao.getOntologyTermCount());
             }
             persistStats("Ontology Annotated Terms", speciesType, dao.getOntologyAnnotatedTermCount(speciesType));
 
-            // added in MAY 2012 -- MT
-            int[] objectKeys = {0,
+            int[] objectKeys = {
+                    OBJECT_KEY_ALL,
                     RgdId.OBJECT_KEY_GENES,
                     RgdId.OBJECT_KEY_QTLS,
                     RgdId.OBJECT_KEY_STRAINS,
@@ -91,20 +95,20 @@ public class ScoreBoardArchiver {
             for( int objectKey: objectKeys ) {
                 String objectName = RgdId.getObjectTypeName(objectKey);
 
-                persistStats((objectKey==0?"Objects":objectName+"s")+" With XDB",
+                persistStats((objectKey==OBJECT_KEY_ALL?"Objects":objectName+"s")+" With XDB",
                         speciesType, dao.getObjectsWithXDBsCount(speciesType, objectKey));
 
-                persistStats("Ontology "+(objectKey==0?"":objectName+" ")+"Annotations",
+                persistStats("Ontology "+(objectKey==OBJECT_KEY_ALL?"":objectName+" ")+"Annotations",
                         speciesType, dao.getOntologyAnnotationCount(speciesType, objectKey));
-                persistStats("Ontology "+(objectKey==0?"Object":objectName)+"s Annotated",
+                persistStats("Ontology "+(objectKey==OBJECT_KEY_ALL?"Object":objectName)+"s Annotated",
                         speciesType, dao.getOntologyAnnotatedObjectCount(speciesType, objectKey));
 
                 String name = StatisticsDAO.getPortalStatName(speciesType, objectKey);
                 persistStats(name, speciesType, dao.getPortalAnnotatedObjectCount(speciesType, objectKey));
 
-                persistStats("Ontology "+(objectKey==0?"":objectName)+" Manual Annotations",
+                persistStats("Ontology "+(objectKey==OBJECT_KEY_ALL?"":objectName)+" Manual Annotations",
                         speciesType, dao.getOntologyManualAnnotationCount(speciesType, objectKey));
-                persistStats("Ontology "+(objectKey==0?"Object":objectName)+"s Manually Annotated",
+                persistStats("Ontology "+(objectKey==OBJECT_KEY_ALL?"Object":objectName)+"s Manually Annotated",
                         speciesType, dao.getOntologyManuallyAnnotatedObjectCount(speciesType, objectKey));
             }
         }

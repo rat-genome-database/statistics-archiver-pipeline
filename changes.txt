@@ -1,3 +1,6 @@
+May 15, 2026
+  code cleanup: named SpeciesType.ALL/OBJECT_KEY_ALL constants; static final logger; explicit imports; removed unused commons-net dep and stale comments
+
 Apr 27, 2026
   bug fix: log memory summary and elapsed time on failure path; updated dependencies
 
