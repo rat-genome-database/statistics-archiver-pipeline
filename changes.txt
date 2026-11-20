@@ -1,3 +1,6 @@
+Nov 20, 2026
+  removed dead portal-stat code (always empty); updated dependencies
+
 Oct 19, 2026
   switched to PostgreSQL JDBC driver; updated dependencies
 
