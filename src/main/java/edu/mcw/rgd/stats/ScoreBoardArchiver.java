@@ -103,9 +103,6 @@ public class ScoreBoardArchiver {
                 persistStats("Ontology "+(objectKey==OBJECT_KEY_ALL?"Object":objectName)+"s Annotated",
                         speciesType, dao.getOntologyAnnotatedObjectCount(speciesType, objectKey));
 
-                String name = StatisticsDAO.getPortalStatName(speciesType, objectKey);
-                persistStats(name, speciesType, dao.getPortalAnnotatedObjectCount(speciesType, objectKey));
-
                 persistStats("Ontology "+(objectKey==OBJECT_KEY_ALL?"":objectName)+" Manual Annotations",
                         speciesType, dao.getOntologyManualAnnotationCount(speciesType, objectKey));
                 persistStats("Ontology "+(objectKey==OBJECT_KEY_ALL?"Object":objectName)+"s Manually Annotated",
